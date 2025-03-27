@@ -1,16 +1,15 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Buffer } from "buffer";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import Loader from "../assets/loader.gif";
 import { setAvatarRoute } from "../utils/ApiRoutes";
+import multiavatar from "@multiavatar/multiavatar";
 
 const SetAvatar = () => {
-  const api = "https://api.multiavatar.com";
   const navigate = useNavigate();
   const [avatars, setAvatars] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -28,13 +27,40 @@ const SetAvatar = () => {
     if (!localStorage.getItem("chat-app-user")) {
       navigate("/login");
     }
+  }, [navigate]);
+
+  useEffect(() => {
+    const fetchAvatars = () => {
+      try {
+        const avatarsData = [];
+        for (let i = 0; i < 4; i++) {
+          const randomNumber = Math.round(Math.random() * 1000);
+          avatarsData.push(btoa(multiavatar(`${randomNumber}`))); // Convert SVG to Base64
+        }
+        setAvatars(avatarsData);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error loading avatars:", error.message);
+        toast.error("Failed to load avatars. Please try again.", toastOptions);
+      }
+    };
+
+    fetchAvatars();
   }, []);
 
   const setProfilePicture = async () => {
     if (selectedAvatar === undefined) {
       toast.error("Please select an avatar", toastOptions);
-    } else {
-      const user = await JSON.parse(localStorage.getItem("chat-app-user"));
+      return;
+    }
+
+    const user = JSON.parse(localStorage.getItem("chat-app-user"));
+    if (!user || !user._id) {
+      toast.error("User not found. Please log in again.", toastOptions);
+      return;
+    }
+
+    try {
       const { data } = await axios.post(`${setAvatarRoute}/${user._id}`, {
         image: avatars[selectedAvatar],
       });
@@ -47,25 +73,11 @@ const SetAvatar = () => {
       } else {
         toast.error("Error setting avatar. Please try again.", toastOptions);
       }
+    } catch (error) {
+      console.error("Error setting avatar:", error.message);
+      toast.error("Failed to set avatar. Please try again.", toastOptions);
     }
   };
-
-  useEffect(() => {
-    const fetchAvatars = async () => {
-      const data = [];
-      for (let i = 0; i < 4; i++) {
-        const randomNumber = Math.round(Math.random() * 1000);
-        const image = await axios.get(
-          `${api}/${randomNumber}?apikey=BPa1eAZ5GOSfyI`
-        );
-        const buffer = new Buffer(image.data);
-        data.push(buffer.toString("base64"));
-      }
-      setAvatars(data);
-      setIsLoading(false);
-    };
-    fetchAvatars();
-  }, []);
 
   return (
     <>

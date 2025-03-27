@@ -1,13 +1,27 @@
 import React, { useState, useEffect, useRef } from "react";
-import ChatInput from "./ChatInput";
-import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import { sendMessageRoute, receiveMessageRoute } from "../utils/ApiRoutes";
+import CryptoJS from "crypto-js"; 
+import ChatInput from './ChatInput';
+import { v4 as uuidv4 } from "uuid";
 
 const ChatContainer = ({ currentChat, socket }) => {
   const [messages, setMessages] = useState([]);
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const scrollRef = useRef();
+
+  const secretKey = "your_secret_key"; // Same secret key used for encryption and decryption
+
+  // Encrypt message using AES
+  const encryptMessage = (message) => {
+    return CryptoJS.AES.encrypt(message, secretKey).toString();
+  };
+
+  // Decrypt message using AES
+  const decryptMessage = (encryptedMessage) => {
+    const bytes = CryptoJS.AES.decrypt(encryptedMessage, secretKey);
+    return bytes.toString(CryptoJS.enc.Utf8); // Converts the bytes back to a string
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -17,7 +31,14 @@ const ChatContainer = ({ currentChat, socket }) => {
           from: data._id,
           to: currentChat._id,
         });
-        setMessages(response.data);
+
+        // Decrypt all received messages
+        const decryptedMessages = response.data.map((msg) => ({
+          fromSelf: msg.fromSelf,
+          message: decryptMessage(msg.message), // Decrypt the message
+        }));
+
+        setMessages(decryptedMessages);
       }
     };
     fetchData();
@@ -26,33 +47,38 @@ const ChatContainer = ({ currentChat, socket }) => {
   const handleSendMsg = async (msg) => {
     const data = await JSON.parse(localStorage.getItem("chat-app-user"));
 
+    // Encrypt the message before sending
+    const encryptedMsg = encryptMessage(msg);
+
     socket.current.emit("send-msg", {
       from: data._id,
       to: currentChat._id,
-      msg,
+      msg: encryptedMsg, // Send encrypted message
     });
 
     await axios.post(sendMessageRoute, {
       from: data._id,
       to: currentChat._id,
-      message: msg,
+      message: encryptedMsg, // Send encrypted message
     });
 
-    const msgs = [...messages];
-    msgs.push({ fromSelf: true, message: msg });
-    setMessages(msgs);
+    // Update the UI with the encrypted message (for the current user)
+    setMessages((prev) => [...prev, { fromSelf: true, message: msg }]);
   };
 
   useEffect(() => {
     if (socket.current) {
       socket.current.on("msg-receive", (msg) => {
-        setArrivalMessage({ fromSelf: false, message: msg });
+        const decryptedMessage = decryptMessage(msg); // Decrypt the received message
+        setArrivalMessage({ fromSelf: false, message: decryptedMessage });
       });
     }
   }, []);
 
   useEffect(() => {
-    arrivalMessage && setMessages((prev) => [...prev, arrivalMessage]);
+    if (arrivalMessage) {
+      setMessages((prev) => [...prev, arrivalMessage]);
+    }
   }, [arrivalMessage]);
 
   useEffect(() => {
@@ -67,7 +93,6 @@ const ChatContainer = ({ currentChat, socket }) => {
           src={`data:image/svg+xml;base64,${currentChat.avatarImage}`}
           alt="avatar"
         />
-
         <h3 className="text-white text-2xl">{currentChat.username}</h3>
       </div>
 
@@ -83,8 +108,8 @@ const ChatContainer = ({ currentChat, socket }) => {
             <div
               className={`max-w-xs p-4 rounded-lg shadow-lg ${
                 message.fromSelf
-                  ? "bg-teal-500 text-white"
-                  : "bg-gray-700 text-white"
+                  ? "bg-teal-500 text-white" // Current user's message
+                  : "bg-gray-700 text-white" // Other user's message
               }`}
             >
               <p>{message.message}</p>
@@ -93,7 +118,7 @@ const ChatContainer = ({ currentChat, socket }) => {
         ))}
       </div>
 
-      <div className="">
+      <div className="mb-4">
         <ChatInput handleSendMsg={handleSendMsg} />
       </div>
     </div>
@@ -101,3 +126,4 @@ const ChatContainer = ({ currentChat, socket }) => {
 };
 
 export default ChatContainer;
+

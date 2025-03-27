@@ -27,6 +27,15 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
+  rsaPublicKey: {
+    type: String,
+    required: true,
+  },
+  rsaPrivateKey: {
+    type: String,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("Users", userSchema);
+
