@@ -62,3 +62,4 @@ const ChatInput = ({ handleSendMsg }) => {
 };
 
 export default ChatInput;
+

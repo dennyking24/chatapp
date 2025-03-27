@@ -6,7 +6,7 @@ import { io } from "socket.io-client";
 import Contacts from "../components/Contacts";
 import Welcome from "../components/Welcome";
 import ChatContainer from "../components/ChatContainer.jsx";
-import { FaBars } from "react-icons/fa"; // Import an icon for the mobile toggle button
+import { FaBars } from "react-icons/fa"; 
 
 const Chat = () => {
   const navigate = useNavigate();

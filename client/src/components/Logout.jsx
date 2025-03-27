@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
 import { BiPowerOff } from "react-icons/bi";
 import { logoutRoute } from "../utils/ApiRoutes";
 
@@ -29,3 +28,4 @@ const Logout = () => {
 };
 
 export default Logout;
+

@@ -1,7 +1,7 @@
 const CryptoJS = require("crypto-js"); // Import the crypto-js module
 const Messages = require("../models/messageModel");
 
-const secretKey = "your_secret_key"; // Make sure to keep this key safe
+const secretKey = "your_secret_key"; 
 
 // Encrypt message before saving it
 const encryptMessage = (message) => {
@@ -11,7 +11,7 @@ const encryptMessage = (message) => {
 // Decrypt message before sending to the client
 const decryptMessage = (encryptedMessage) => {
   const bytes = CryptoJS.AES.decrypt(encryptedMessage, secretKey);
-  return bytes.toString(CryptoJS.enc.Utf8); // Returns the decrypted message
+  return bytes.toString(CryptoJS.enc.Utf8); 
 };
 
 module.exports.getMessages = async (req, res, next) => {
