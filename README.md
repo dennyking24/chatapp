@@ -1,16 +1,21 @@
 # Simple Chat App
 
-A real-time chat application built with **React** and **Node.js**, using **Socket.IO** for messaging, and **MongoDB** for storing user data and chats.
+A secure, encrypted communication and collaboration application built with React, Node.js, Socket.IO, and MongoDB, designed for secure messaging between two parties who have not met to exchange keys. This application supports PKI-based authentication, ensuring secure identity verification through RSA key pairs, without requiring participants to exchange keys beforehand.
 
-## Features
+Features
+End-to-End Encryption: Messages are encrypted between two parties using RSA encryption, ensuring that only the recipient can decrypt the messages.
 
-- **User Authentication:** Secure registration and login.
-- **Real-time Messaging:** Instant message exchange between users using Socket.IO.
-- **Responsive Design:** Works seamlessly on phones, tablets, and desktops.
-- **User Avatars:** Users can select avatars during registration.
-- **Mobile-Friendly:** Optimized for mobile devices with responsive contacts sidebar.
-- **Dark Futuristic Theme:** UI design focused on modern, sleek aesthetics.
-- **Media Sharing:** Share images, files, and more (optional).
+User Authentication: PKI-based authentication to verify user identities, leveraging SSL certificates for secure communication.
+
+Real-time Messaging: Instant message exchange between users using Socket.IO, with encryption applied to all messages.
+
+Responsive Design: Optimized for use on phones, tablets, and desktops, with a user-friendly interface.
+
+User Avatars: Users can select an avatar during registration for a personalized experience.
+
+Mobile-Friendly: Optimized for mobile devices, featuring a responsive contacts sidebar and chat interface.
+
+Dark Futuristic Theme: Modern and sleek UI design with dark mode aesthetics.
 
 ## Screenshots
 
@@ -21,19 +26,6 @@ Here are a few screenshots of the app in action:
 - **Registration Page**: ![Registration Page](./images/Register.jpg)
 - **Avatar Selection**: ![Avatar Selection](./images/Avatar.jpg)
 - **Chat Interface**: ![Chat Interface](./images/Chat.jpg)
-
-### For mobile:
-
-<table>
-  <tr>
-    <td><img src="./images/Login.jpg" alt="Image1" width="200"/></td>
-    <td><img src="./images/Contacts.jpg" alt="Image2" width="200"/></td>
-  </tr>
-  <tr>
-    <td><img src="./images/Chat-mobile.jpg" alt="Image3" width="200"/></td>
-    <td><img src="./images/Avatar-mobile.jpg" alt="Image4" width="200"/></td>
-  </tr>
-</table>
 
 ## Tech Stack
 
@@ -46,7 +38,7 @@ Here are a few screenshots of the app in action:
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/kerBiy/simple-chat.git
+   git clone [https://github.com/dennyking24/chatapp]
    ```
 2. Navigate to the project directory:
 
