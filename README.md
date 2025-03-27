@@ -46,7 +46,7 @@ Here are a few screenshots of the app in action:
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/kerBiy/simple-chat.git
+   git clone https://github.com/dennyking24/chatapp.git
    ```
 2. Navigate to the project directory:
 
