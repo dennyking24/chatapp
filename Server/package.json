@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "build": "vite build",
+    "serve": "vite preview"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
