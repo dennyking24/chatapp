@@ -20,7 +20,7 @@ mongoose
     console.log(err.message);
   });
 
-app.use("/api/auth", userRoutes);
+app.use("/api/auth", userRouts);
 app.use("/api/messages", messageRoutes);
 
 const server = app.listen(process.env.PORT, () => {
