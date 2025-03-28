@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const userRouts = require("./routes/userRoutes");
+const userRoutes = require("./routes/userRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 
 const app = express();
@@ -20,7 +20,7 @@ mongoose
     console.log(err.message);
   });
 
-app.use("/api/auth", userRouts);
+app.use("/api/auth", userRoutes);
 app.use("/api/messages", messageRoutes);
 
 const server = app.listen(process.env.PORT, () => {
