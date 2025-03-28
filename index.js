@@ -5,12 +5,15 @@ const mongoose = require("mongoose");
 const userRouts = require("./routes/userRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 
+
 const app = express();
 const socket = require("socket.io");
 require("dotenv").config();
 
 app.use(cors());
 app.use(express.json());
+
+
 
 mongoose
   .connect(process.env.MONGO_URL)
